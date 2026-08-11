@@ -73,7 +73,6 @@
     </div>
 
     <script>
-        let registeredEmails = ["test@example.com"];
         let currentEmail = "";
         let generatedOtp = "";
 
@@ -83,7 +82,8 @@
             if(!email || !password) { alert('الرجاء إدخال البيانات'); return; }
 
             try {
-                const response = await fetch('http://localhost:3000/send-code', {
+                // تم تعديل المسار هنا ليكون مساراً نسبياً يعمل على السيرفر
+                const response = await fetch('/send-code', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ to: email })
@@ -97,7 +97,10 @@
                 } else {
                     alert('فشل الإرسال: ' + data.message);
                 }
-            } catch (error) { alert('تأكد أن السيرفر شغال!'); }
+            } catch (error) { 
+                console.error(error);
+                alert('حدث خطأ في الاتصال بالسيرفر!'); 
+            }
         }
 
         function closeVerifyModal() { document.getElementById('verify-modal').classList.add('hidden'); }
