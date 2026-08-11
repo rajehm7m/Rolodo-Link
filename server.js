@@ -40,6 +40,9 @@ app.post('/send-code', async (req, res) => {
     }
 });
 
+// هذا السطر يخلي السيرفر يعرض ملفات الموقع الموجودة في نفس المجلد
+app.use(express.static(__dirname));
+
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
