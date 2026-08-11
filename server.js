@@ -1,54 +1,15 @@
 const express = require('express');
-const cors = require('cors');
-const nodemailer = require('nodemailer');
-
+const path = require('path');
 const app = express();
-const PORT = 3000;
-
-app.use(express.json());
-app.use(cors());
-
-// إعدادات البريد الصحيحة اللي جربناها وضبطت
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: 'rajehmm7m@gmail.com',
-        pass: 'vlmfimbkycqtogsk'
-    }
-});
-
-// دالة توليد كود عشوائي من 6 أرقام
-const generateCode = () => Math.floor(100000 + Math.random() * 900000).toString();
-
-// مسار إرسال كود التحقق
-app.post('/send-code', async (req, res) => {
-    const { to } = req.body;
-    const code = generateCode(); 
-
-    try {
-        await transporter.sendMail({
-            from: 'rajehmm7m@gmail.com',
-            to: to,
-            subject: "كود التحقق الخاص بك",
-            text: `كود التحقق الخاص بك هو: ${code}`
-        });
-        
-        res.status(200).json({ success: true, message: 'تم إرسال الكود!', code: code });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ success: false, message: 'فشل الإرسال', error: error.message });
-    }
-});
-
-// هذا السطر يخلي السيرفر يعرض ملفات الموقع الموجودة في نفس المجلد
-app.use(express.static(__dirname));
-
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
 const PORT = process.env.PORT || 3000;
 
+// هذا السطر يخلي السيرفر يعرض ملفات الموقع الموجودة في نفس المجلد (HTML, CSS, JS)
 app.use(express.static(__dirname));
+
+// هذا السطر يضمن أن السيرفر يرسل ملف index.html أول ما يفتح الشخص رابط الموقع
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
