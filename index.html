@@ -82,7 +82,7 @@
             if(!email || !password) { alert('الرجاء إدخال البيانات'); return; }
 
             try {
-                // تم تعديل المسار هنا ليكون مساراً نسبياً يعمل على السيرفر
+                // مسار نسبي يتوافق تلقائياً مع سيرفر Render بدون مشاكل الـ localhost
                 const response = await fetch('/send-code', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
